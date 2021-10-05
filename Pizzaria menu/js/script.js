@@ -150,6 +150,7 @@ function renderPizzas(pizzas) {
 //stores pizza object within session storage and renders object into the browser
 function addToSessionStorage(pizzas) {
     sessionStorage.setItem('pizzas', JSON.stringify(pizzas));
+    pizzas = filterPizzasBy(filter, pizzas);
     renderPizzas(pizzas);
 }
 
@@ -196,33 +197,39 @@ function filterPizzasBy(filter, pizzas) {
             if (nameA > nameB){
                 return 0;
             }
-        });
-        nameLabel.classList.add('selected-filter');
-        priceLabel.classList.remove('selected-filter');
-        heatLabel.classList.remove('selected-filter');        
+        });     
     }
     else if(filter === 'by-price') {
         pizzas.sort(function(a,b) {
             return a.price - b.price ;
-        })
-        nameLabel.classList.remove('selected-filter');
-        priceLabel.classList.add('selected-filter');
-        heatLabel.classList.remove('selected-filter');  
+        }) 
     }
     else if(filter === 'by-heat') {
         pizzas.sort(function(a,b) {
             return b.heat - a.heat ;
         })
-        nameLabel.classList.remove('selected-filter');
-        priceLabel.classList.remove('selected-filter');
-        heatLabel.classList.add('selected-filter');  
     }
     return pizzas;
 }
 
 //Event listener for filter selection
-document.querySelector('.filter').addEventListener('click', function(event) {
+document.querySelector('.filter').addEventListener('click', function() {
     filter = document.querySelector('input[name="filter"]:checked').value;
+        if(filter === 'by-name') {
+        nameLabel.classList.add('selected-filter');
+        priceLabel.classList.remove('selected-filter');
+        heatLabel.classList.remove('selected-filter');        
+    }
+    else if(filter === 'by-price') {
+        nameLabel.classList.remove('selected-filter');
+        priceLabel.classList.add('selected-filter');
+        heatLabel.classList.remove('selected-filter');  
+    }
+    else if(filter === 'by-heat') {
+        nameLabel.classList.remove('selected-filter');
+        priceLabel.classList.remove('selected-filter');
+        heatLabel.classList.add('selected-filter');  
+    }
     getFromSessionStorage(filter);
 })
 
